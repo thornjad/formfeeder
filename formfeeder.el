@@ -139,5 +139,9 @@ window."
 			(formfeeder--add-font-lock-keywords)
 		(formfeeder--remove-font-lock-keywords)))
 
+;;;###autoload
+(define-globalized-minor-mode global-formfeeder-mode
+  formfeeder-mode (lambda () (formfeeder-mode 1)))
+
 (provide 'formfeeder)
 ;;; formfeeder.el ends here
