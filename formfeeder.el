@@ -139,9 +139,13 @@ window."
 			(formfeeder--add-font-lock-keywords)
 		(formfeeder--remove-font-lock-keywords)))
 
+(defun formfeeder--turn-on-mode-if-desired ()
+  (when (apply #'derived-mode-p '(prog-mode text-mode))
+    (formfeeder-mode 1)))
+
 ;;;###autoload
 (define-globalized-minor-mode global-formfeeder-mode
-  formfeeder-mode (lambda () (formfeeder-mode 1)))
+  formfeeder-mode formfeeder--turn-on-mode-if-desired)
 
 (provide 'formfeeder)
 ;;; formfeeder.el ends here
