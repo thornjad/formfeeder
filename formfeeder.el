@@ -43,21 +43,21 @@
 ;;; variables
 
 (defgroup formfeeder nil
-	"Turn ^L glyphs into horizontal lines."
-	:prefix "formfeeder-"
-	:group 'faces)
+  "Turn ^L glyphs into horizontal lines."
+  :prefix "formfeeder-"
+  :group 'faces)
 
 (defface formfeeder-line
-	'((((type graphic)
-			(background light)) :strike-through "black")
-		(((type graphic)
-			(background dark)) :strike-through "white")
-		(((type tty)) :inherit font-lock-comment-face :underline t))
-	"Face for formfeeder-mode lines."
-	:group 'formfeeder)
+  '((((type graphic)
+      (background light)) :strike-through "black")
+    (((type graphic)
+      (background dark)) :strike-through "white")
+    (((type tty)) :inherit font-lock-comment-face :underline t))
+  "Face for formfeeder-mode lines."
+  :group 'formfeeder)
 
 (defcustom formfeeder-line-width t
-	"Width of the form feed line.
+  "Width of the form feed line.
 It may be one of the following values:
 
 t: Full width.
@@ -70,76 +70,77 @@ of 80 would use a 80 characters wide line.
 
 negative integer number: Full width minus specified number of
 columns.  A value of -1 would leave the last column empty."
-	:type '(choice (const :tag "Full width" t)
-								 (float :tag "Ratio")
-								 (integer :tag "Columns"))
-	:group 'formfeeder)
+  :type '(choice (const :tag "Full width" t)
+                 (float :tag "Ratio")
+                 (integer :tag "Columns"))
+  :group 'formfeeder)
 
 (defvar formfeeder--line-width
-	(cond
-	 ((integerp formfeeder-line-width)
-		(if (>= formfeeder-line-width 0)
-				formfeeder-line-width
-			`(- text ,(abs formfeeder-line-width))))
-	 ((floatp formfeeder-line-width)
-		`(,formfeeder-line-width . text))
-	 (t 'text)))
+  (cond
+   ((integerp formfeeder-line-width)
+    (if (>= formfeeder-line-width 0)
+        formfeeder-line-width
+      `(- text ,(abs formfeeder-line-width))))
+   ((floatp formfeeder-line-width)
+    `(,formfeeder-line-width . text))
+   (t 'text)))
 
 (defcustom formfeeder-extra-properties nil
-	"List of additional text properties to add to form feeds."
-	:type '(plist)
-	:group 'formfeeder)
+  "List of additional text properties to add to form feeds."
+  :type '(plist)
+  :group 'formfeeder)
 
 (defvar formfeeder--font-lock-face
-	;; NOTE see (info "(elisp) Search-based fontification") and the
-	;; `(MATCHER . FACESPEC)' section
-	`(face formfeeder-line display (space :width ,formfeeder--line-width)
-				 ,@formfeeder-extra-properties))
+  ;; NOTE see (info "(elisp) Search-based fontification") and the
+  ;; `(MATCHER . FACESPEC)' section
+  `(face formfeeder-line display (space :width ,formfeeder--line-width)
+         ,@formfeeder-extra-properties))
 
 (defvar formfeeder--font-lock-keywords
-	;; NOTE see (info "(elisp) Search-based fontification") and the
-	;; `(MATCHER . SUBEXP-HIGHLIGHTER)' section
-	`((,page-delimiter 0 formfeeder--font-lock-face t)))
+  ;; NOTE see (info "(elisp) Search-based fontification") and the
+  ;; `(MATCHER . SUBEXP-HIGHLIGHTER)' section
+  `((,page-delimiter 0 formfeeder--font-lock-face t)))
 
 (defcustom formfeeder-lighter " ^L"
-	"Lighter for `formfeeder-mode'."
-	:type 'string
-	:group 'formfeeder
-	:risky t)
+  "Lighter string when formfeeder mode is active."
+  :type 'string
+  :group 'formfeeder
+  :risky t)
 
 
 ;;; Functions
 
 (defun formfeeder--add-font-lock-keywords ()
-	"Add buffer-local keywords to display page delimiter lines.
+  "Add buffer-local keywords to display page delimiter lines.
 Make sure the special properties involved get cleaned up on
 removal of the keywords via
 `formfeeder-remove-font-lock-keywords'."
-	(font-lock-add-keywords nil formfeeder--font-lock-keywords)
-	(set (make-local-variable 'font-lock-extra-managed-props)
-			 (append `(display ,@formfeeder-extra-properties)
-							 font-lock-extra-managed-props)))
+  (font-lock-add-keywords nil formfeeder--font-lock-keywords)
+  (set (make-local-variable 'font-lock-extra-managed-props)
+       (append `(display ,@formfeeder-extra-properties)
+               font-lock-extra-managed-props)))
 
 (defun formfeeder--remove-font-lock-keywords ()
-	"Remove buffer-local keywords displaying page delimiter lines."
-	(font-lock-remove-keywords nil formfeeder--font-lock-keywords)
-	(dolist (property (append '(display) formfeeder-extra-properties))
-		(setq font-lock-extra-managed-props
-					(delq property font-lock-extra-managed-props))))
+  "Remove buffer-local keywords displaying page delimiter lines."
+  (font-lock-remove-keywords nil formfeeder--font-lock-keywords)
+  (dolist (property (append '(display) formfeeder-extra-properties))
+    (setq font-lock-extra-managed-props
+          (delq property font-lock-extra-managed-props))))
 
 ;;;###autoload
 (define-minor-mode formfeeder-mode
-	"Toggle formfeeder-mode.
+  "Toggle formfeeder-mode.
 
 This minor mode displays page delimiters which usually appear as ^L
 glyphs on a single line as horizontal lines spanning the entire
 window."
-	:lighter formfeeder-lighter
-	(if formfeeder-mode
-			(formfeeder--add-font-lock-keywords)
-		(formfeeder--remove-font-lock-keywords)))
+  :lighter formfeeder-lighter
+  (if formfeeder-mode
+      (formfeeder--add-font-lock-keywords)
+    (formfeeder--remove-font-lock-keywords)))
 
 (defun formfeeder--turn-on-mode-if-desired ()
+  "Activate function `formfeeder-mode' if in a prog or text mode."
   (when (apply #'derived-mode-p '(prog-mode text-mode))
     (formfeeder-mode 1)))
 
