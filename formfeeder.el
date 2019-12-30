@@ -58,18 +58,19 @@
 
 (defcustom formfeeder-line-width t
   "Width of the form feed line.
+
 It may be one of the following values:
 
 t: Full width.
 
-floating point number: Ratio of full width.  A value of 0.5 would
-use half the width.
+floating point number: Ratio of full width. A value of 0.5 would use half the
+width.
 
-positive integer number: Width as measured in columns.  A value
-of 80 would use a 80 characters wide line.
+positive integer number: Width as measured in columns. A value of 80 would use a
+80 characters wide line.
 
-negative integer number: Full width minus specified number of
-columns.  A value of -1 would leave the last column empty."
+negative integer number: Full width minus specified number of columns. A value
+of -1 would leave the last column empty."
   :type '(choice (const :tag "Full width" t)
                  (float :tag "Ratio")
                  (integer :tag "Columns"))
@@ -118,9 +119,9 @@ columns.  A value of -1 would leave the last column empty."
 
 (defun formfeeder--add-font-lock-keywords ()
   "Add buffer-local keywords to display page delimiter lines.
-Make sure the special properties involved get cleaned up on
-removal of the keywords via
-`formfeeder-remove-font-lock-keywords'."
+
+Make sure the special properties involved get cleaned up on removal of the
+keywords via `formfeeder-remove-font-lock-keywords'."
   (font-lock-add-keywords nil formfeeder--font-lock-keywords)
   (set (make-local-variable 'font-lock-extra-managed-props)
        (append `(display ,@formfeeder-extra-properties)
@@ -137,9 +138,14 @@ removal of the keywords via
 (define-minor-mode formfeeder-mode
   "Toggle formfeeder-mode.
 
-This minor mode displays page delimiters which usually appear as ^L
-glyphs on a single line as horizontal lines spanning the entire
-window."
+This minor mode displays page delimiters which usually appear as ^L glyphs on a
+single line as horizontal lines spanning the entire window.
+
+If called with a prefix argument, activate if ARG is positive, disable
+otherwise.
+
+If called from Lisp, also enables the mode if ARG is omitted or nil, and toggles
+it if ARG is `toggle'."
   :lighter formfeeder-lighter
   :group 'formfeeder
   (if formfeeder-mode
