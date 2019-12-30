@@ -135,6 +135,7 @@ This minor mode displays page delimiters which usually appear as ^L
 glyphs on a single line as horizontal lines spanning the entire
 window."
   :lighter formfeeder-lighter
+  :group 'formfeeder
   (if formfeeder-mode
       (formfeeder--add-font-lock-keywords)
     (formfeeder--remove-font-lock-keywords)))
