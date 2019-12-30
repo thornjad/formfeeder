@@ -107,6 +107,12 @@ columns.  A value of -1 would leave the last column empty."
   :group 'formfeeder
   :risky t)
 
+(defcustom formfeeder-modes
+  '(text-mode prog-mode)
+  "Modes in which to enable `formfeeder-mode'."
+  :type '(repeat symbol)
+  :group 'formfeeder)
+
 
 ;;; Functions
 
@@ -141,8 +147,10 @@ window."
     (formfeeder--remove-font-lock-keywords)))
 
 (defun formfeeder--turn-on-mode-if-desired ()
-  "Activate function `formfeeder-mode' if in a prog or text mode."
-  (when (apply #'derived-mode-p '(prog-mode text-mode))
+  "Activate function `formfeeder-mode' if desired.
+
+Activates when `major-mode' is in or derived from `formfeeder-modes'."
+  (when (apply #'derived-mode-p formfeeder-modes)
     (formfeeder-mode 1)))
 
 ;;;###autoload
