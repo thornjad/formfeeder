@@ -106,9 +106,13 @@ of -1 would leave the last column empty."
   :group 'formfeeder
   :risky t)
 
-(defcustom formfeeder-modes
-  '(text-mode prog-mode)
-  "Modes in which to enable `formfeeder-mode'."
+(defcustom formfeeder-enable-modes
+  '(prog-mode text-mode help-mode eww-mode)
+  "List of major modes in which `formfeeder-mode' is activated.
+When using `global-formfeeder-mode', this is used to choose in which buffers to
+activate.
+
+See also `formfeeder-disable-modes'."
   :type '(repeat symbol)
   :group 'formfeeder)
 
@@ -133,10 +137,16 @@ keywords via `formfeeder-remove-font-lock-keywords'."
     (setq font-lock-extra-managed-props
           (delq property font-lock-extra-managed-props))))
 
+(defun formfeeder--turn-on-mode-if-desired ()
+  "Activate function `formfeeder-mode' if desired.
+Activates when `major-mode' is in or derived from `formfeeder-enable-modes'."
+  (when (and (apply #'derived-mode-p formfeeder-enable-modes)
+             (not (bound-and-true-p enriched-mode)))
+    (formfeeder-mode 1)))
+
 ;;;###autoload
 (define-minor-mode formfeeder-mode
   "Toggle formfeeder-mode.
-
 This minor mode displays page delimiters which usually appear as ^L glyphs on a
 single line as horizontal lines spanning the entire window.
 
@@ -149,14 +159,13 @@ it if ARG is `toggle'."
   :group 'formfeeder
   (if formfeeder-mode
       (formfeeder--add-font-lock-keywords)
-    (formfeeder--remove-font-lock-keywords)))
+    (formfeeder--remove-font-lock-keywords))
 
-(defun formfeeder--turn-on-mode-if-desired ()
-  "Activate function `formfeeder-mode' if desired.
-
-Activates when `major-mode' is in or derived from `formfeeder-modes'."
-  (when (apply #'derived-mode-p formfeeder-modes)
-    (formfeeder-mode 1)))
+  ;; Flush changes
+  (when (called-interactively-p 'interactive)
+    (if (fboundp 'font-lock-flush)
+        (font-lock-flush)
+      (font-lock-fontify-buffer))))
 
 ;;;###autoload
 (define-globalized-minor-mode global-formfeeder-mode
