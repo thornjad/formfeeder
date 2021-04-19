@@ -165,7 +165,7 @@ keywords via `formfeeder-remove-font-lock-keywords'."
 Activates when `major-mode' is in or derived from `formfeeder-enable-modes'."
   (when (and (apply #'derived-mode-p formfeeder-enable-modes)
              (not (bound-and-true-p enriched-mode)))
-    (formfeeder-mode 1)))
+    (formfeeder-mode)))
 
 ;;;###autoload
 (define-minor-mode formfeeder-mode
