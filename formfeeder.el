@@ -48,10 +48,8 @@
   :group 'faces)
 
 (defface formfeeder-line
-  '((((type graphic)
-      (background light)) :strike-through "black")
-    (((type graphic)
-      (background dark)) :strike-through "white")
+  '((((type graphic) (background light)) :strike-through "black")
+    (((type graphic) (background dark)) :strike-through "white")
     (((type tty)) :inherit font-lock-comment-face :underline t))
   "Face for formfeeder-mode lines."
   :group 'formfeeder)
@@ -66,8 +64,8 @@ t: Full width.
 floating point number: Ratio of full width. A value of 0.5 would use half the
 width.
 
-positive integer number: Width as measured in columns. A value of 80 would use a
-80 characters wide line.
+positive integer number: Width as measured in columns. A value of 88 would use
+a 88 characters wide line.
 
 negative integer number: Full width minus specified number of columns. A value
 of -1 would leave the last column empty."
@@ -92,14 +90,14 @@ of -1 would leave the last column empty."
   :group 'formfeeder)
 
 (defvar formfeeder--font-lock-face
-  ;; NOTE see (info "(elisp) Search-based fontification") and the
-  ;; `(MATCHER . FACESPEC)' section
+  ;; NOTE see (info "(elisp) Search-based fontification") and the `(MATCHER . FACESPEC)'
+  ;; section
   `(face formfeeder-line display (space :width ,formfeeder--line-width)
          ,@formfeeder-extra-properties))
 
 (defvar formfeeder--font-lock-keywords
-  ;; NOTE see (info "(elisp) Search-based fontification") and the
-  ;; `(MATCHER . SUBEXP-HIGHLIGHTER)' section
+  ;; NOTE see (info "(elisp) Search-based fontification") and the `(MATCHER .
+  ;; SUBEXP-HIGHLIGHTER)' section
   `((,page-delimiter 0 formfeeder--font-lock-face t)))
 
 (defcustom formfeeder-lighter " ^L"
