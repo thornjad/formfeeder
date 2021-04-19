@@ -42,12 +42,8 @@ example:
 ## License
 
 This package is based on earlier work by Vasilij Schneidermann's form-feed package.
-This package is a slightly customized version ofVasilij Schneidermann's
-form-feed package. That package's readme is a good read:
-https://github.com/wasamasa/form-feed.
 
-Copyright (c) 2019-2021 Jade Michael Thornton
-
+Copyright (c) 2019-2021 Jade Michael Thornton<br>
 Copyright (c) 2014-2016 Vasilij Schneidermann
 
 This program is free software; you may redistribute it and/or modify it under the
