@@ -121,9 +121,10 @@ of -1 would leave the last column empty."
 Make sure the special properties involved get cleaned up on removal of the
 keywords via `formfeeder-remove-font-lock-keywords'."
   (font-lock-add-keywords nil formfeeder--font-lock-keywords)
-  (set (make-local-variable 'font-lock-extra-managed-props)
-       (append `(display ,@formfeeder-extra-properties)
-               font-lock-extra-managed-props)))
+  (make-local-variable 'font-lock-extra-managed-props)
+  (dolist (prop `(display ,@formfeeder-extra-properties))
+    (unless (memq prop font-lock-extra-managed-props)
+      (push prop font-lock-extra-managed-props))))
 
 (defun formfeeder--remove-font-lock-keywords ()
   "Remove buffer-local keywords displaying page delimiter lines."
