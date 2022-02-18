@@ -93,7 +93,8 @@ of -1 would leave the last column empty."
                  (integer :tag "Columns"))
   :group 'formfeeder)
 
-(defvar formfeeder--line-width
+(defsubst formfeeder--line-width ()
+  "Get the line width to use."
   (cond
    ((integerp formfeeder-line-width)
     (if (>= formfeeder-line-width 0)
@@ -111,7 +112,7 @@ of -1 would leave the last column empty."
 (defvar formfeeder--font-lock-face
   ;; NOTE see (info "(elisp) Search-based fontification") and the `(MATCHER . FACESPEC)'
   ;; section
-  `(face formfeeder-line display (space :width ,formfeeder--line-width)
+  `(face formfeeder-line display (space :width ,(formfeeder--line-width))
          ,@formfeeder-extra-properties))
 
 (defvar formfeeder--font-lock-keywords
