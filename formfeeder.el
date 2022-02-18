@@ -197,9 +197,7 @@ it if ARG is `toggle'."
 
   ;; Flush changes
   (when (called-interactively-p 'interactive)
-    (if (fboundp 'font-lock-flush)
-        (font-lock-flush)
-      (font-lock-fontify-buffer))))
+    (font-lock-flush)))
 
 ;;;###autoload
 (define-globalized-minor-mode global-formfeeder-mode
