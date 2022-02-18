@@ -47,7 +47,7 @@
 ;;
 ;; This package is based on earlier work by Vasilij Schneidermann's form-feed package.
 ;;
-;; Copyright (c) 2019-2021 Jade Michael Thornton<br>
+;; Copyright (c) 2019-2022 Jade Michael Thornton<br>
 ;; Copyright (c) 2014-2016 Vasilij Schneidermann
 ;;
 ;; This program is free software; you may redistribute it and/or modify it under the
@@ -126,12 +126,24 @@ of -1 would leave the last column empty."
   :risky t)
 
 (defcustom formfeeder-enable-modes
-  '(prog-mode text-mode help-mode eww-mode)
+  '(prog-mode text-mode help-mode)
   "List of major modes in which `formfeeder-mode' is activated.
+
 When using `global-formfeeder-mode', this is used to choose in which buffers to
 activate.
 
 See also `formfeeder-disable-modes'."
+  :type '(repeat symbol)
+  :group 'formfeeder)
+
+(defcustom formfeeder-disable-modes
+  '(eww-mode)
+  "List of major modes in which `formfeeder-mode' is deactivated.
+
+The default is to disable in `eww-mode', since search-based
+fontification seems to break everything in eww.
+
+See also `formfeeder-enable-modes'."
   :type '(repeat symbol)
   :group 'formfeeder)
 
@@ -150,7 +162,9 @@ keywords via `formfeeder-remove-font-lock-keywords'."
       (push prop font-lock-extra-managed-props))))
 
 (defun formfeeder--remove-font-lock-keywords ()
-  "Remove buffer-local keywords displaying page delimiter lines."
+  "Remove buffer-local keywords displaying page delimiter lines.
+
+Reversal of `formfeeder--add-font-lock-keywords'."
   (font-lock-remove-keywords nil formfeeder--font-lock-keywords)
   (dolist (property (append '(display) formfeeder-extra-properties))
     (setq font-lock-extra-managed-props
@@ -160,6 +174,7 @@ keywords via `formfeeder-remove-font-lock-keywords'."
   "Activate function `formfeeder-mode' if desired.
 Activates when `major-mode' is in or derived from `formfeeder-enable-modes'."
   (when (and (apply #'derived-mode-p formfeeder-enable-modes)
+             (not (apply #'derived-mode-p formfeeder-disable-modes))
              (not (bound-and-true-p enriched-mode)))
     (formfeeder-mode)))
 
