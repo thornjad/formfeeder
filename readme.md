@@ -52,6 +52,11 @@ Foundation. This program carries no warranty whatsoever, without even the implie
 warranty of merchantability or fitness for a particular purpose. See
 <https://www.gnu.org/licenses/> for more details.
 
+---
+
+Found this useful? [Buy me a coffee!](https://buymeacoffee.com/jademichaelthornton)
+
+
 
 ---
 Converted from `formfeeder.el` by [_el2md_](https://gitlab.com/thornjad/el2md).
